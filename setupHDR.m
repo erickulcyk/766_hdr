@@ -30,7 +30,7 @@ function [ imgs, Z, T, L, W ] = setupHDR(fnames, n)
         try
             T(i) = info.DigitalCamera.ExposureTime;
         catch err
-            T(i) = 1/(5-i);
+            T(i) = 1/(numel(fnames)-i+1);
         end
         
         % choose w(j,i) according to distance from max,min
