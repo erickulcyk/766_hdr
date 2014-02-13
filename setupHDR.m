@@ -8,7 +8,7 @@ function [ imgs, Z, T, L, W ] = setupHDR(fnames, n)
         
     Z = zeros(n*n,numel(fnames));
     W = zeros(n*n,numel(fnames));
-    imgs = zeros(size(fnames,1));
+    imgs = zeros(numel(fnames));
     i = 1;
     for name = fnames
         img = imread(name);

@@ -7,7 +7,6 @@ function [ hslImgs ] = FramesToHSL(imgs)
     columns = size(imgs,3);
     channels = size(imgs,4);
     
-    
     hslImgs = zeros(imgCount, rows,columns, channels);
     for i=1:imgCount
         for j=1:rows
