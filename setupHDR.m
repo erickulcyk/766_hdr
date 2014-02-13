@@ -3,11 +3,13 @@
 % taken from an nxn grid centered on each of the images
 % And an array of j exposure lengths
 % Also maybe some other things
-function [ Z, T ] = setupHDR(fnames, n)
+function [ imgs, Z, T ] = setupHDR(fnames, n)
     
     i = 1;
+    imgs = zeros(size(fnames,1));
     for name = fnames
         img = imread(name);
+        imgs(i)=img;
         
         % set up Z(:,j) by extracting nxn grid of pixels in hsl format
         pxd = size(img)/6;
