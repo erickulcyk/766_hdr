@@ -7,7 +7,6 @@ function [ imgs, Z, T, L, W ] = setupHDR(fnames, n)
     assert(iscellstr(fnames), 'Error: fnames must be a cell array of filename strings');
         
     Z = zeros(n*n,numel(fnames));
-    W = zeros(n*n,numel(fnames));
     i = 1;
     while i<=numel(fnames)
         img = imread(fnames{i});
@@ -33,21 +32,20 @@ function [ imgs, Z, T, L, W ] = setupHDR(fnames, n)
             T(i) = 1/(numel(fnames)-i+1);
         end
         
-        % choose w(j,i) according to distance from max,min
-        % w(j,i) = z-Zmin for z close to Zmin
-        % w(j,i) = Zmax-z for z close to Zmax
-        for j = (1:n*n)
-            px = Z(j,i);
-            if px > 128 
-                W(j,i) = 255-px;
-            else
-                W(j,i) = px;
-            end
-        end
         %Next image
         i = i+1;
     end
     
+    W = zeros(256);
+    W = W(:,1);
+    for j = (0:255)
+        if j > 127.5 
+            W(j+1) = 255-j;
+        else
+            W(j+1) = j;
+        end
+    end
+
     L = 1;
     
 end
