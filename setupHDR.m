@@ -29,7 +29,9 @@ function [ imgs, Z, T, L, W ] = setupHDR(fnames, n)
         try
             T(i) = info.DigitalCamera.ExposureTime;
         catch err
-            T(i) = 1/(numel(fnames)-i+1);
+            %T(i) = 1/(numel(fnames)-i+1);
+            T(1) = 1/30;
+            T(2) = 1/120;
         end
         
         %Next image

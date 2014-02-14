@@ -32,9 +32,6 @@ b = zeros(size(A,1),1);
 %% Include the data−fitting equations
 index = 1;
 
-disp('Size of Z is: ')
-disp(pixel_count)
-disp(img_count)
 for i=1:pixel_count
     for j=1:img_count
         val = Z(i,j);
@@ -50,8 +47,8 @@ A(index,129) = 1;
 index=index+1;
 %% Include the smoothness equations
 for i=1:n-2
-    A(index,i)=l*weight(i+1);
-    A(index,i+1)=-2*l*weight(i+1);
+    A(index,i)=lambda*weight(i+1);
+    A(index,i+1)=-2*lambda*weight(i+1);
     A(index,i+2)=lambda*weight(i+1);
     index=index+1;
 end
