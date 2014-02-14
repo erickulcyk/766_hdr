@@ -5,7 +5,7 @@
 % Also maybe some other things
 function [ imgs, Z, T, L, W ] = setupHDR(fnames, n)
     assert(iscellstr(fnames), 'Error: fnames must be a cell array of filename strings');
-        
+       
     Z = zeros(n*n,numel(fnames));
     i = 1;
     while i<=numel(fnames)
