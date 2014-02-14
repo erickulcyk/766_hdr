@@ -10,7 +10,7 @@ function [ rgbImg ] = FrameToRGB(img)
     for i=1:rows
         for j=1:columns
             pixel = img(i,j,:)/255.0;
-            rgbImg(i,j,:) = uint8(HSLtoRGB(pixel));
+            rgbImg(i,j,:) = uint8(round(HSLtoRGB(pixel)));
         end
     end
 end
