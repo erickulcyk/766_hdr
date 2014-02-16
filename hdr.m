@@ -4,37 +4,57 @@
 % weight = weight of each brightness (0..255)
 % channel = channel to apply hdr to.
 % returns a single hdr image.
-function [ hdr_img ] = hdr( imgs, Time, g, weight, channel)
+function [ hdr_img ] = hdr( hdr_img, imgs, Time, g, weight, channel)
 
+    %o = squeeze(imgs(1,:,:,:));
+    %disp(size(o));
+    %imshow(o);
     img_size = size(imgs,1);
     img_w = size(imgs,2);
     img_h = size(imgs,3);
-    channels = size(imgs,4);
+    %channels = size(imgs,4);
     
-    hdr_img = zeros(img_w,img_h, channels);
+    %hdr_img = zeros(img_w,img_h, channels);
     weight_total = zeros(img_w,img_h);
     for i=1:img_w
+        %disp(i);
         for j=1:img_h
+            hdr_img(i,j,channel) = 0;
             for k=1:img_size
-                for l=1:channels
-                    if(l==channel)
-                        pixel = imgs(k,i,j,l);
-                        hdr_img(i,j,l) = hdr_img(i,j,l) + weight(pixel+1)*(g(pixel+1)-log(Time(k)));
+                %for l=1:channels
+                %    if(l==channel || channel==-1)
+                        pixel = imgs(k,i,j,channel);
+                        %
+                        hdr_img(i,j,channel) = hdr_img(i,j,channel) + weight(pixel+1)*(g(pixel+1)-log(Time(k)));
                         weight_total(i,j) = weight_total(i,j) + weight(pixel+1);
-                    else
-                        pixel = imgs(1,i,j,l);%(k
-                        hdr_img(i,j,l) = hdr_img(i,j,l) + pixel/img_size;%weight(pixel+1);
-                    end
-                end
+               %     else
+                %        pixel = imgs(k,i,j,l);%(k
+                        %new_pixel = hdr_img(i,j,l) + pixel/img_size;%weight(pixel+1);
+                 %       new_pixel = pixel/img_size;%weight(pixel+1);
+                 %       hdr_img(i,j,l) = new_pixel;
+                 %   end
+                %end
             end
         end
     end
     
     for i=1:img_w
         for j=1:img_h
-            %for l=1:channels
+            %if(channel==-1)
+            %    for l=1:channels
+            %        hdr_img(i,j,l) = hdr_img(i,j,l)/weight_total(i,j);
+           %     end
+           % end
+           % if (channel>0)
+           if(weight_total(i,j) ==0)
+               hdr_img(i,j,channel) = 1;
+           else
                 hdr_img(i,j,channel) = hdr_img(i,j,channel)/weight_total(i,j);
-            %end
+           end
+                %if(hdr_img(i,j,channel)<0)
+                %    disp(hdr_img(i,j,channel));
+                %end
+           % end
         end
     end
 end
