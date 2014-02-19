@@ -49,8 +49,8 @@ function [ hdr_img ] = hdr( hdr_img, imgs, refind, Time, g, weightfunc, channel,
         
         disp(['Deghosting complete for image ',num2str(k)]);
     end
-    
-    for i=1:img_w
+    disp('Done with hdr part 1');
+    parfor i=1:img_w
         for j=1:img_h
            if(weight_total(i,j) ==0)
                hdr_img(i,j,channel) = 1;

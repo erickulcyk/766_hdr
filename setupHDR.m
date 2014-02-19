@@ -55,6 +55,6 @@ function [ imgs, Z, T, L, W ] = setupHDR(fnames, n, channel)
         end
     end
 
-    L = 1;
+    L = 1; W = W+.5;
     
 end
