@@ -1,4 +1,4 @@
-function [ hdr_rgb_img, g, weight ] = HDRComplete(fnames, n, channel)
+function [ hdr_rgb_img, tone_map, hdr_img, g, weight ] = HDRComplete(fnames, n, channel, hsl_lut, rgb_lut, use_hsl, use_tonemap )
 
     if(channel==-1)
         [imgs, Z, T, lambda, weight] = setupHDR(fnames,n, 0);
@@ -12,35 +12,34 @@ function [ hdr_rgb_img, g, weight ] = HDRComplete(fnames, n, channel)
             disp('Done Setup');
             g = gsolve2(Z, T, lambda, weight);
             disp('Done Gsolve');
-            hdr_img = hdr(hdr_img,imgs,T, g, weight, i);% 3);
+            hdr_img = hdr(hdr_img,imgs,T, g, weight, i);
             disp('Done to hdr_img');
-            %hdr_img = exp(hdr_img);
-            %hdr_img(:,:,i) = (hdr_img(:,:,i)-min(min(hdr_img(:,:,i))))*255/(max(max(hdr_img(:,:,i)))-min(min(hdr_img(:,:,i))));
         end
     else
         [imgs, Z, T, lambda, weight] = setupHDR(fnames,n, channel);
+        disp('Done Setup');
         
         %handle unused channels
-        hdr_img = mean(imgs,1); %use average value across images for unused channels
-        %hdr_img = imgs(1,:,:,:); %arbitrarily take unused channels from first image
-        
-        disp('Done Setup');
-        %HSLImgs = FramesToHSL(imgs);
-        disp('Done to HSL');
+        if(use_hsl == 1)
+            hsl_imgs =  FramesToHSL(imgs, hsl_lut);
+            hdr_img = squeeze(mean(hsl_imgs,1)); %use average value across images for unused channels
+            disp('Done Convert To HSL');
+        else
+            hdr_img = squeeze(mean(imgs,1)); %use average value across images for unused channels
+        end
+
         g = gsolve2(Z, T, lambda, weight);
         disp('Done gsolve');
-        %hdr_img = hdr(HSLImgs,T, g, weight, -1);% 3);
-        hdr_img = hdr(hdr_img,imgs,T, g, weight, channel);% 3);
+        hdr_img = hdr(hdr_img,hsl_imgs,T, g, weight, channel);
         disp('Done to hdr_img');
-        hdr_img(:,:,channel) = (hdr_img(:,:,channel)-min(min(hdr_img(:,:,channel))))*255/max(max(hdr_img(:,:,channel)));
-        
     end
     
-    %map resulting radiances to 0-255 scale
-    if(channel >0)
-        
+    if(use_tonemap ==1)
+        tone_map = SimpleToneMap(hdr_img);
+        if(use_hsl==1)
+            hdr_rgb_img = FrameToRGB(tone_map, rgb_lut);
+        end
+    else
+        hdr_rgb_img = hdr_img;
     end
-    
-    hdr_rgb_img = hdr_img;
-    %hdr_rgb_img = uint8(round(hdr_img)); %FrameToRGB(hdr_img);
 end

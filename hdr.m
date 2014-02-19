@@ -12,21 +12,23 @@ function [ hdr_img ] = hdr( hdr_img, imgs, Time, g, weight, channel)
     img_size = size(imgs,1);
     img_w = size(imgs,2);
     img_h = size(imgs,3);
-    %channels = size(imgs,4);
+    channels = size(imgs,4);
     
     %hdr_img = zeros(img_w,img_h, channels);
     weight_total = zeros(img_w,img_h);
-    for i=1:img_w
+    disp('HDR size:');
+    disp(size(hdr_img));
+    parfor i=1:img_w
         %disp(i);
         for j=1:img_h
             hdr_img(i,j,channel) = 0;
             for k=1:img_size
                 %for l=1:channels
                 %    if(l==channel || channel==-1)
-                        pixel = imgs(k,i,j,channel);
+                        pixel = imgs(k,i,j,channel)+1;
                         %
-                        hdr_img(i,j,channel) = hdr_img(i,j,channel) + weight(pixel+1)*(g(pixel+1)-log(Time(k)));
-                        weight_total(i,j) = weight_total(i,j) + weight(pixel+1);
+                        hdr_img(i,j,channel) = hdr_img(i,j,channel) + weight(pixel)*(g(pixel)-log(Time(k)));
+                        weight_total(i,j) = weight_total(i,j) + weight(pixel);
                %     else
                 %        pixel = imgs(k,i,j,l);%(k
                         %new_pixel = hdr_img(i,j,l) + pixel/img_size;%weight(pixel+1);
@@ -37,8 +39,8 @@ function [ hdr_img ] = hdr( hdr_img, imgs, Time, g, weight, channel)
             end
         end
     end
-    
-    for i=1:img_w
+    disp('Done with hdr part 1');
+    parfor i=1:img_w
         for j=1:img_h
             %if(channel==-1)
             %    for l=1:channels
