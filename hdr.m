@@ -40,7 +40,7 @@ function [ hdr_img ] = hdr( hdr_img, imgs, refind, Time, g, weightfunc, channel,
         end
         if useRef > 0
             %de-ghost by filtering weights based on correlation with reference image
-            weight(:,:) = DeGhostWeights(weight(:,:),Irr(:,:,k),IrrRef,100, ghostthresh);
+            weight(:,:) = DeGhostWeights(weight(:,:),Irr(:,:,k),IrrRef,50, ghostthresh);
         end
         
         %add weighted value to totals for each pixel

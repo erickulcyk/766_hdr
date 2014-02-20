@@ -20,7 +20,9 @@ if(man==1)
         [Z, T, lambda, garbage] = setupHDR(fnames,n, channel);
         imgs = ReadImgs(fnames);
         disp('Done Setup');
-        
+        refind = selectRef(imgs);
+        disp('Got reference');
+           
         %handle unused channels
         if(use_hsl == 1)
             hsl_imgs =  FramesToHSL(imgs, hsl_lut);
