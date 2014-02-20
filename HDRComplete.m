@@ -12,22 +12,24 @@ if(man==1)
             disp('Done Setup');
             refind = selectRef(imgs);
             disp('Got reference');
-            hdr_img = hdr(hdr_img,imgs, refind, T, g, weight, i,deGhost,5, use_hsl);% 3);
+            hdr_img = hdr(hdr_img,imgs, refind, T, g, weight, i,deGhost,1.5, use_hsl);% 3);
             disp('Done to hdr_img');
         end
     else
         [imgs, Z, T, lambda, garbage] = setupHDR(fnames,n, channel);
         disp('Done Setup');
-        
+        refind = selectRef(imgs);
+        disp('Got reference');
+           
         %handle unused channels
         if(use_hsl == 1)
             hsl_imgs =  FramesToHSL(imgs, hsl_lut);
             hdr_img = squeeze(mean(hsl_imgs,1)); %use average value across images for unused channels
             disp('Done Convert To HSL');
-            hdr_img = hdr(hdr_img,hsl_imgs,refind, T, g, weight, channel,deGhost,5, use_hsl);
+            hdr_img = hdr(hdr_img,hsl_imgs,refind, T, g, weight, channel,deGhost,1.5, use_hsl);
         else
             hdr_img = squeeze(mean(imgs,1)); %use average value across images for unused channels
-            hdr_img = hdr(hdr_img,imgs,refind,T, g, weight, channel,deGhost,5, use_hsl);% 3);
+            hdr_img = hdr(hdr_img,imgs,refind,T, g, weight, channel,deGhost,1.5, use_hsl);% 3);
         end
         disp('Done to hdr_img');
         
@@ -75,10 +77,10 @@ if(man==0)
             hsl_imgs = FramesToHSL(imgs, hsl_lut);
             hdr_img = squeeze(hsl_imgs(4,:,:,:));%mean(hsl_imgs,1)); %use average value across images for unused channels
             disp('Done Convert To HSL');
-            hdr_img = hdr(hdr_img,hsl_imgs, refind, T, g, weight, channel,deGhost,5, use_hsl);
+            hdr_img = hdr(hdr_img,hsl_imgs, refind, T, g, weight, channel,deGhost,1.5, use_hsl);
         else
             hdr_img = squeeze(mean(imgs,1)); %use average value across images for unused channels
-            hdr_img = hdr(hdr_img,imgs, refind, T, g, weight, channel,deGhost,5, use_hsl);
+            hdr_img = hdr(hdr_img,imgs, refind, T, g, weight, channel,deGhost,1.5, use_hsl);
         end
         disp('Done to hdr_img');
     end
