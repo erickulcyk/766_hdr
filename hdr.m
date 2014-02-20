@@ -4,7 +4,7 @@
 % weight = weight of each brightness (0..255)
 % channel = channel to apply hdr to.
 % returns a single hdr image.
-function [ hdr_img ] = hdr( hdr_img, imgs, refind, Time, g, weightfunc, channel, useRef, ghostthresh)
+function [ hdr_img ] = hdr( hdr_img, imgs, refind, Time, g, weightfunc, channel, useRef, ghostthresh, use_hsl)
     
     img_size = size(imgs,1);
     img_w = size(imgs,2);
@@ -28,6 +28,7 @@ function [ hdr_img ] = hdr( hdr_img, imgs, refind, Time, g, weightfunc, channel,
     weight = zeros(size(imgs,2),size(imgs,3));
     weight_total = zeros(img_w,img_h);
         
+    max_weights = zeros(size(imgs,2),size(imgs,3),2);
     
     for k=1:img_size
         %compute weights using weightfunc
@@ -49,15 +50,23 @@ function [ hdr_img ] = hdr( hdr_img, imgs, refind, Time, g, weightfunc, channel,
                % hdr_img(i,j,1) = hdr_img(i,j,1) + weight(i,j)*imgs(k,i,j,1);
                % hdr_img(i,j,2) = hdr_img(i,j,1) + weight(i,j)*imgs(k,i,j,2);
                 weight_total(i,j) = weight_total(i,j) +  weight(i,j);
+                if max_weights(i,j,1) <= weight(i,j)
+                    max_weights(i,j,1) = weight(i,j);
+                    max_weights(i,j,2) = k;
+                end
                 %weightfunc(pixel)*(g(pixel)-log(Time(k)));
             end
-        end
+       end
         
         disp(['Deghosting complete for image ',num2str(k)]);
    end
     disp('Done with hdr part 1');
     for i=1:img_w
         for j=1:img_h
+           if(use_hsl)
+               hdr_img(i,j,1) = imgs(max_weights(i,j,2),i,j,1);
+               hdr_img(i,j,2) = imgs(max_weights(i,j,2),i,j,2);
+           end
            hdr_img(i,j,channel) = hdr_img(i,j,channel)/weight_total(i,j);
             %hdr_img(i,j,1) = hdr_img(i,j,1)/weight_total(i,j);
            %  hdr_img(i,j,2) = hdr_img(i,j,2)/weight_total(i,j);
