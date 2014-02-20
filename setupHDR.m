@@ -3,14 +3,13 @@
 % taken from an nxn grid centered on each of the images
 % And an array of j exposure lengths
 % Also maybe some other things
-function [ imgs, Z, T, L, W ] = setupHDR(fnames, n, channel)
+function [ Z, T, L, W ] = setupHDR(fnames, n, channel)
     assert(iscellstr(fnames), 'Error: fnames must be a cell array of filename strings');
        
     Z = zeros(n*n,numel(fnames));
     i = 1;
     while i<=numel(fnames)
         img = imread(fnames{i});
-        imgs(i,:,:,:)=img;
         
         % set up Z(:,i) by extracting nxn grid of pixels in hsl format
         pxd = size(img)/(n+1);
