@@ -14,14 +14,7 @@ function [ hslImgs ] = FramesToHSL(imgs, lut)
             disp(j);
             for k=1:columns
                 tmp = squeeze(imgs(i,j,k,:))+1;
-               % disp('tmp2: ');
-              %  disp(tmp2);
-               % disp('size tmp2: ')
-              %  disp(size(tmp2));
-                %disp('tmp: ');
-                %disp(tmp);
                 hslImgs(i,j,k,:) =  squeeze(lut(tmp(1),tmp(2),tmp(3),:));
-                %disp(size(tmp));
             end
         end
         disp(['Done: ', num2str(i)]);
