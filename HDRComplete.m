@@ -1,14 +1,14 @@
 function [ hdr_rgb_img, tone_map, hdr_img, g, weight ] = HDRComplete(fnames, n, channel,hsl_lut, rgb_lut, use_hsl, use_tonemap, g,weight,man, deGhost)
 if(man==1)
     if(channel==-1)
-        [Z, T, lambda, garbage] = setupHDR(fnames,n, 0, use_hsl);
+        [Z, T, lambda, garbage] = setupHDR(fnames,n, 0);
         disp(T);
         img_w = size(imgs,2);
         img_h = size(imgs,3);
         channels = size(imgs,4);
         hdr_img = zeros(img_w,img_h, channels);
         for i=1:channels
-            [Z, T, lambda, garbage] = setupHDR(fnames,n, i, use_hsl);
+            [Z, T, lambda, garbage] = setupHDR(fnames,n, i);
             imgs = ReadImgs(fnames);
             disp('Done Setup');
             refind = selectRef(imgs);
@@ -17,7 +17,7 @@ if(man==1)
             disp('Done to hdr_img');
         end
     else
-        [Z, T, lambda, garbage] = setupHDR(fnames,n, channel, use_hsl);
+        [Z, T, lambda, garbage] = setupHDR(fnames,n, channel);
         imgs = ReadImgs(fnames);
         disp('Done Setup');
         refind = selectRef(imgs);
@@ -56,7 +56,7 @@ if(man==0)
         channels = size(imgs,4);
         hdr_img = zeros(img_w,img_h, channels);
         for i=1:3
-            [Z, T, lambda, weight] = setupHDR(fnames,n, i, use_hsl);
+            [Z, T, lambda, weight] = setupHDR(fnames,n, i);
             disp('Done Setup');
             refind = selectRef(imgs);
             disp('Got reference');
@@ -66,7 +66,7 @@ if(man==0)
             disp('Done to hdr_img');
         end
     else
-        [Z, T, lambda, weight] = setupHDR(fnames,n, channel, use_hsl);
+        [Z, T, lambda, weight] = setupHDR(fnames,n, channel);
         disp('Done Setup');
         
         disp('Got reference');

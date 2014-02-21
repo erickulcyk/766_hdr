@@ -37,7 +37,7 @@ function [ hdr_img ] = hdr( hdr_img, imgs, refind, Time, g, weightfunc, channel,
         img(:,:) = squeeze(imgs(k,:,:,channel));
         parfor i=1:img_w
             for j=1:img_h
-                weight(i,j) = weightfunc(imgs(k,i,j,channel));
+                weight(i,j) = weightfunc(imgs(k,i,j,channel)+1);
             end
         end
         if useRef > 0

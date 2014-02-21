@@ -3,7 +3,7 @@
 % taken from an nxn grid centered on each of the images
 % And an array of j exposure lengths
 % Also maybe some other things
-function [ Z, T, L, W ] = setupHDR(fnames, n, channel, use_HSL)
+function [ Z, T, L, W ] = setupHDR(fnames, n, channel)
     assert(iscellstr(fnames), 'Error: fnames must be a cell array of filename strings');
        
     Z = zeros(n*n,numel(fnames));
@@ -18,14 +18,9 @@ function [ Z, T, L, W ] = setupHDR(fnames, n, channel, use_HSL)
         crds = round(crds);
         for x = (1:n)
             for y = (1:n)
-                if(channel>0 && ~use_HSL)
+                if(channel>0)
                     tmp = img(crds(1,x),crds(2,y),:);
                     Z(n*x+y-n,i) = tmp(channel);
-                end
-                
-                if(channel>0 && use_HSL)
-                    tmp = RGBtoHSL(img(crds(1,x),crds(2,y),:));
-                    Z(n*x+y-n,i) = tmp(3);
                 end
                 
                 if(channel == 0)
