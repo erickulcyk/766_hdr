@@ -22,7 +22,7 @@ if(man==1)
         disp('Done Setup');
         refind = selectRef(imgs);
         disp('Got reference');
-           
+        
         %handle unused channels
         if(use_hsl == 1)
             hsl_imgs =  FramesToHSL(imgs, hsl_lut);
@@ -35,18 +35,18 @@ if(man==1)
         end
         disp('Done to hdr_img');
         
-        if(use_tonemap==1)
-            tone_map = uint8(round(hdr_img));
-            tone_map(:,:,channel) = SimpleToneMap(hdr_img,channel,50);
+        if(use_tonemap == 1)
+            tone_map = hdr_img;
+            tone_map(:,:,channel) = SimpleToneMap(hdr_img,channel,60);
             if(use_hsl==1)
-                hdr_rgb_img = FrameToRGB(tone_map,rgb_lut);
+                hdr_rgb_img = FrameToRGB(uint8(round(tone_map)),rgb_lut);
             end
         else
             hdr_rgb_img = uint8(round(hdr_img));
             tone_map = hdr_img;
         end
     end
-end    
+end
 if(man==0)
     if(channel==-1)
         disp(T);
@@ -73,9 +73,9 @@ if(man==0)
         g = gsolve2(Z, T, lambda, weight);
         disp('Done gsolve');
         
-         imgs = ReadImgs(fnames);
-         disp('Done reading imgs');
-         
+        imgs = ReadImgs(fnames);
+        disp('Done reading imgs');
+        
         refind = selectRef(imgs);
         
         %handle unused channels
@@ -92,10 +92,10 @@ if(man==0)
     end
     
     if(use_tonemap == 1)
-        tone_map = uint8(round(hdr_img));
+        tone_map = hdr_img;
         tone_map(:,:,channel) = SimpleToneMap(hdr_img,channel,60);
         if(use_hsl==1)
-            hdr_rgb_img = FrameToRGB(tone_map,rgb_lut);
+            hdr_rgb_img = FrameToRGB(uint8(round(tone_map)),rgb_lut);
         end
     else
         hdr_rgb_img = uint8(round(hdr_img));
