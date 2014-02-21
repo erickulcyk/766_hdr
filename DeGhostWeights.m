@@ -7,7 +7,8 @@ function [ weights ] = DeGhostWeights(weights,LogIrr,LogIrrRef,n, ghostthresh)
     crds(1,:) = pxd(1)*(0:n)+1;
     crds(2,:) = pxd(2)*(0:n)+1;
     crds = round(crds);
-    thresh = 0.05*n*n;
+    thresh = 0.005*pxd(1)*pxd(2);
+    countThrown = 0;
     for x = (1:n)
         for y = (1:n)
             lik(:,:) = LogIrr(crds(1,x):(crds(1,x+1)-1),crds(2,y):(crds(2,y+1)-1));
@@ -17,6 +18,7 @@ function [ weights ] = DeGhostWeights(weights,LogIrr,LogIrrRef,n, ghostthresh)
                 % this patch exceeds the threshold condition
                 %disp(['Ghosting detected on patch ',num2str(40*(x-1)+y)]);
                 weights(crds(1,x):(crds(1,x+1)-1),crds(2,y):(crds(2,y+1)-1)) = 0;
+                countThrown = countThrown+1;
                                 
                 %{if(n>5)
                 %    weights(crds(1,x):(crds(1,x+1)-1),crds(2,y):(crds(2,y+1)-1)) = DeGhostWeights(weights(crds(1,x):(crds(1,x+1)-1),...
@@ -31,5 +33,6 @@ function [ weights ] = DeGhostWeights(weights,LogIrr,LogIrrRef,n, ghostthresh)
             clearvars lir; % on subsequent iterations
         end
     end
+    disp(['Threw out ', num2str(countThrown), ' patches which exceeded ghost thresholds.']);
 end
 
