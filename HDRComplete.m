@@ -37,7 +37,7 @@ if(man==1)
         
         if(use_tonemap == 1)
             tone_map = hdr_img;
-            tone_map(:,:,channel) = SimpleToneMap(hdr_img,channel,60);
+            tone_map(:,:,channel) = SimpleToneMap(squeeze(hdr_img(:,:,channel)),60);
             if(use_hsl==1)
                 hdr_rgb_img = FrameToRGB(uint8(round(tone_map)),rgb_lut);
             end
@@ -93,7 +93,7 @@ if(man==0)
     
     if(use_tonemap == 1)
         tone_map = hdr_img;
-        tone_map(:,:,channel) = SimpleToneMap(hdr_img,channel,60);
+        tone_map(:,:,channel) = SimpleToneMap(squeeze(hdr_img(:,:,channel)),60);
         if(use_hsl==1)
             hdr_rgb_img = FrameToRGB(uint8(round(tone_map)),rgb_lut);
         end
