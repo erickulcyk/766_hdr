@@ -16,7 +16,9 @@ function [ hdr_img ] = hdr( hdr_img, imgs, refind, Time, g, weightfunc, channel,
     for k=1:img_size
         img(:,:) = squeeze(imgs(k,:,:,channel));
         Irr(:,:,k) = FindLogIrr(img(:,:),Time(k),g);
-        disp(['Image ',num2str(k) ,' max difference ', num2str(max(max(squeeze(Irr(:,:,k))-IrrRef(:,:))))]);
+        if(useRef>0)
+            disp(['Image ',num2str(k) ,' max difference ', num2str(max(max(squeeze(Irr(:,:,k))-IrrRef(:,:))))]);
+        end
     end
     disp('Found log irradiances.  Weighting images...');
     
@@ -58,7 +60,9 @@ function [ hdr_img ] = hdr( hdr_img, imgs, refind, Time, g, weightfunc, channel,
             end
        end
         
-        disp(['Deghosting complete for image ',num2str(k)]);
+       if useRef >0
+           disp(['Deghosting complete for image ',num2str(k)]);
+       end
    end
     disp('Done with hdr part 1');
     for i=1:img_w
