@@ -16,13 +16,16 @@ function [ weights ] = DeGhostWeights(weights,LogIrr,LogIrrRef,n, ghostthresh)
             if gcountExcThresh(lik, lir, (crds(1,x+1)-1)-crds(1,x), (crds(2,y+1)-1)-crds(2,y), b, ghostthresh, thresh) == 1
                 % this patch exceeds the threshold condition
                 %disp(['Ghosting detected on patch ',num2str(40*(x-1)+y)]);
-                if(n>5)
-                    weights(crds(1,x):(crds(1,x+1)-1),crds(2,y):(crds(2,y+1)-1)) = DeGhostWeights(weights(crds(1,x):(crds(1,x+1)-1),...
-                                                                                          crds(2,y):(crds(2,y+1)-1)),...
-                                                                                          lik,lir,5,ghostthresh);
-                else
-                    weights(crds(1,x):(crds(1,x+1)-1),crds(2,y):(crds(2,y+1)-1)) = weights(crds(1,x):(crds(1,x+1)-1),crds(2,y):(crds(2,y+1)-1))/2;
-                end
+                weights(crds(1,x):(crds(1,x+1)-1),crds(2,y):(crds(2,y+1)-1)) = 0;
+                                
+                %{if(n>5)
+                %    weights(crds(1,x):(crds(1,x+1)-1),crds(2,y):(crds(2,y+1)-1)) = DeGhostWeights(weights(crds(1,x):(crds(1,x+1)-1),...
+                %                                                                          crds(2,y):(crds(2,y+1)-1)),...
+                %                                                                          lik,lir,5,ghostthresh);
+                %else
+                %    weights(crds(1,x):(crds(1,x+1)-1),crds(2,y):(crds(2,y+1)-1)) = weights(crds(1,x):(crds(1,x+1)-1),crds(2,y):(crds(2,y+1)-1))/2;
+                %end
+                %}
             end
             clearvars lik; % forget the patch size as it may be different 
             clearvars lir; % on subsequent iterations

@@ -74,7 +74,7 @@ if(man==0)
         disp('Done gsolve');
         
          imgs = ReadImgs(fnames);
-         dist('Done reading imgs');
+         disp('Done reading imgs');
          
         refind = selectRef(imgs);
         
